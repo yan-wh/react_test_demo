@@ -1,7 +1,10 @@
 import React, {useEffect, useState} from "react";
 import { Table, Tag, Button, Select, Input } from 'antd'
 import type { ColumnsType } from 'antd/es/table';
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../store";
 import GetMockData from '../../request/index'
+import { getIndexPageData } from '../../reducer/indexPage'
 
 interface propsType {
     name: string,
@@ -65,18 +68,30 @@ const columns: ColumnsType<DataType> = [
 
 export default function CommonTable(props: propsType) {
 
+  const dispatch = useDispatch();
+  const indexPage = useSelector(
+    (state: RootState) => state.indexPage
+  );
+
+
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
     const [currentPage, setCurrentPage] = useState(1)
 
     useEffect(()=>{
-        const timer = GetMockData({setData, setLoading, setCurrentPage})
-        return ()=>{
-            clearTimeout(timer)
-            setLoading(true)
-            setCurrentPage(1)
-            setData([])
-        }
+      dispatch(getIndexPageData({
+        id: '2',
+        completed: true,
+        text: '更新数据'
+      }))
+      console.log('indexPage', indexPage)
+      const timer = GetMockData({setData, setLoading, setCurrentPage})
+      return ()=>{
+          clearTimeout(timer)
+          setLoading(true)
+          setCurrentPage(1)
+          setData([])
+      }
     },[])
 
     function handleChange(value: any) {

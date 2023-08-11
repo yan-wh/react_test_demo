@@ -5,7 +5,7 @@ import App from './App';
 import IndexPage from './pages';
 import reportWebVitals from './reportWebVitals';
 
-// import store from './store'
+import store from './store/index'
 import {Provider} from 'react-redux'
 
 const root = ReactDOM.createRoot(
@@ -13,13 +13,17 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    {/* <Provider store={store}>
+    <Provider store={store}>
       <IndexPage />
-    </Provider> */}
+    </Provider>
     {/* <App /> */}
-    <IndexPage />
+    {/* <IndexPage /> */}
   </React.StrictMode>
 );
+
+// if (process.env.NODE_ENV === 'development' && module.hot) {
+//   module.hot.accept('./app/App', render)
+// }
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
