@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import IndexPage from './pages/index';
 import TestPage from './pages/test'
+import DemoCom from './pages/demo'
 import reportWebVitals from './reportWebVitals';
 
 import store from './store/index'
@@ -15,8 +16,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <TestPage />
-      <IndexPage />
+
+      <DemoCom/>
+
+      {/* <TestPage /> */}
+      {/* <IndexPage /> */}
       
     </Provider>
     {/* <App /> */}
