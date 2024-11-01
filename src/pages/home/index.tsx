@@ -70,7 +70,7 @@ function getConfig3(config: IConfig13) {
 // 类型断言一般用于你知道这个类型是什么，但是编译器不知道的情况
 // 类型守卫一般用于你知道这个类型是什么，但是编译器不知道的情况
 
-
+import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from '@nextui-org/react';
 import { useState } from 'react'
 
 interface IConfig {
@@ -81,8 +81,54 @@ interface IConfig {
 
 
 export default function Home() {
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [ config, setConfig ] = useState<IConfig>({name: '', age: 0})
     return (
-        <div></div>
+        <div>
+            <Button onPress={onOpen}>Open Modal</Button>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop={'blur'} placement={'auto'}
+                classNames={{
+                base: "bg-white text-black",
+                // header: "border-b-[1px] border-[#292f46]",
+                // footer: "border-t-[1px] border-[#292f46]",
+                // closeButton: "hover:bg-white/5 active:bg-white/10",
+                }}
+            >
+                <ModalContent>
+                {(onClose) => (
+                    <>
+                    <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+                    <ModalBody>
+                        <p> 
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Nullam pulvinar risus non risus hendrerit venenatis.
+                        Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                        </p>
+                        <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Nullam pulvinar risus non risus hendrerit venenatis.
+                        Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                        </p>
+                        <p>
+                        Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
+                        dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. 
+                        Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. 
+                        Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur 
+                        proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam.
+                        </p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="danger" variant="light" onPress={onClose}>
+                        Close
+                        </Button>
+                        <Button color="primary" onPress={onClose}>
+                        Action
+                        </Button>
+                    </ModalFooter>
+                    </>
+                )}
+                </ModalContent>
+            </Modal>
+        </div>
     )
 }

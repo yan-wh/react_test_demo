@@ -1,0 +1,9 @@
+.container-base {
+    padding: 10px 0 10px 0;
+
+}
+
+.my-text {
+    /* font-size: var(--nextui-font-size-large); */
+    font-size: 20px;
+}

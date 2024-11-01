@@ -1,57 +1,27 @@
 import './App.css';
-import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from '@nextui-org/react';
+import React from 'react';
+import Layout from './layout';
 
-const App = () => {
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
-
+// 应用组件
+const App: React.FC = () => {
   return (
-    <div className='App'>
-      <Button onPress={onOpen}>Open Modal</Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
-              <ModalBody>
-                <p> 
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
-                  dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. 
-                  Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. 
-                  Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur 
-                  proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+    <div className="common-dark text-foreground bg-background App">
+      <Layout />
     </div>
+
+    // 不太推荐的路由嵌套写法
+    // <BrowserRouter>
+    //   <div className='App'>
+    //     <NavbarComponent />
+    //     <div>
+    //       <Routes>
+    //         <Route path="/" element={<div>首页</div>} />
+    //         <Route path="/test" element={<TestPage />} />
+    //       </Routes>
+    //     </div>
+    //   </div>
+    // </BrowserRouter>
   );
-  // return (
-  //   <div className="content">
-  //     <div style={{width: '100px', height: '60px'}}>
-  //       <Button color="primary">Click me</Button>
-  //     </div>
-  //   </div>
-  // );
 };
 
 export default App;
