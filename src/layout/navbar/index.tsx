@@ -1,7 +1,7 @@
 // 顶部导航组件
 
 import { Link } from 'react-router-dom';
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar } from "@nextui-org/react";
 import { ChevronDown, Lock, Activity, Flash, Server, TagUser, Scale } from "./icons";
 import { AcmeLogo } from "./acmeLogo";
 import './index.css'
@@ -28,26 +28,114 @@ const NavbarComponent = () => {
         >
             <NavbarBrand>
                 <AcmeLogo />
-                <p className="font-bold text-inherit">ACME</p>
+                <p className="font-bold text-inherit">慧慧子And灏灏子</p>
             </NavbarBrand>
             <NavbarContent className="sm:flex gap-4" justify="center">
+                <Dropdown>
+                    <NavbarItem>
+                        <DropdownTrigger>
+                            <Button
+                                disableRipple
+                                className="p-0 bg-transparent data-[hover=true]:bg-transparent text-2xl"
+                                endContent={icons.chevron}
+                                radius="sm"
+                                variant="light"
+                            >
+                                回忆
+                            </Button>
+                        </DropdownTrigger>
+                    </NavbarItem>
+                    <DropdownMenu
+                        aria-label="ACME features"
+                        className="w-[340px]"
+                        itemClasses={{
+                            base: "gap-4",
+                        }}
+                    >
+                        <DropdownItem
+                            key="autoscaling"
+                            description="ACME scales apps to meet user demand, automagically, based on load."
+                            startContent={icons.scale}
+                        >
+                            瞬间
+                        </DropdownItem>
+                        <DropdownItem
+                            key="usage_metrics"
+                            description="Real-time metrics to debug issues. Slow query added? We’ll show you exactly where."
+                            startContent={icons.activity}
+                        >
+                            纪念
+                        </DropdownItem>
+                        <DropdownItem
+                            key="production_ready"
+                            description="ACME runs on ACME, join us and others serving requests at web scale."
+                            startContent={icons.flash}
+                        >
+                            Production Ready
+                        </DropdownItem>
+                        <DropdownItem
+                            key="99_uptime"
+                            description="Applications stay on the grid with high availability and high uptime guarantees."
+                            startContent={icons.server}
+                        >
+                            +99% Uptime
+                        </DropdownItem>
+                        <DropdownItem
+                            key="supreme_support"
+                            description="Overcome any challenge with a supporting team ready to respond."
+                            startContent={icons.user}
+                        >
+                            +Supreme Support
+                        </DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
                 <NavbarItem>
                     <Link to="/test">
-                        <span>Test</span>
+                        <span>瞬间</span>
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
                     <Link to="/home">
-                        <span>Home</span>
+                        <span>纪念</span>
                     </Link>
                 </NavbarItem>
             </NavbarContent>
             <NavbarContent justify="end">
                 <NavbarItem>
                     <Button as={Link} color="primary" href="#" variant="flat">
-                        Sign Up
+                        登录
                     </Button>
                 </NavbarItem>
+            </NavbarContent>
+            <NavbarContent as="div" justify="end">
+                <Dropdown placement="bottom-end">
+                    <DropdownTrigger>
+                        <Avatar
+                            isBordered
+                            as="button"
+                            className="transition-transform"
+                            color="secondary"
+                            name="Jason Hughes"
+                            size="sm"
+                            src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                        />
+                    </DropdownTrigger>
+                    <DropdownMenu aria-label="Profile Actions" variant="flat">
+                        <DropdownItem key="profile" className="h-14 gap-2">
+                            <p className="font-semibold">Signed in as</p>
+                            <p className="font-semibold">zoey@example.com</p>
+                        </DropdownItem>
+                        <DropdownItem key="settings">My Settings</DropdownItem>
+                        <DropdownItem key="team_settings">Team Settings</DropdownItem>
+                        <DropdownItem key="analytics">Analytics</DropdownItem>
+                        <DropdownItem key="system">System</DropdownItem>
+                        <DropdownItem key="configurations">Configurations</DropdownItem>
+                        <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
+                        <DropdownItem key="logout" color="danger">
+                            Log Out
+                        </DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
             </NavbarContent>
         </Navbar>
     );

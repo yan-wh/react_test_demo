@@ -70,8 +70,21 @@ function getConfig3(config: IConfig13) {
 // 类型断言一般用于你知道这个类型是什么，但是编译器不知道的情况
 // 类型守卫一般用于你知道这个类型是什么，但是编译器不知道的情况
 
-import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from '@nextui-org/react';
+import { 
+    Button, 
+    Modal, 
+    ModalContent, 
+    ModalHeader, 
+    ModalBody, 
+    ModalFooter, 
+    useDisclosure, 
+    Card, 
+    Skeleton, 
+    Calendar,  
+} from '@nextui-org/react';
 import { useState } from 'react'
+import { parseDate } from '@internationalized/date'
+import MusicBox from '../../components/MusicBox'
 
 interface IConfig {
     name: string
@@ -83,52 +96,83 @@ interface IConfig {
 export default function Home() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [ config, setConfig ] = useState<IConfig>({name: '', age: 0})
+    let [curDate, setCurDate] = useState(parseDate(new Date().toISOString().split('T')[0]))
     return (
-        <div>
-            <Button onPress={onOpen}>Open Modal</Button>
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop={'blur'} placement={'auto'}
-                classNames={{
-                base: "bg-white text-black",
-                // header: "border-b-[1px] border-[#292f46]",
-                // footer: "border-t-[1px] border-[#292f46]",
-                // closeButton: "hover:bg-white/5 active:bg-white/10",
-                }}
-            >
-                <ModalContent>
-                {(onClose) => (
-                    <>
-                    <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
-                    <ModalBody>
-                        <p> 
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Nullam pulvinar risus non risus hendrerit venenatis.
-                        Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                        </p>
-                        <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Nullam pulvinar risus non risus hendrerit venenatis.
-                        Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                        </p>
-                        <p>
-                        Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
-                        dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. 
-                        Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. 
-                        Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur 
-                        proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam.
-                        </p>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="danger" variant="light" onPress={onClose}>
-                        Close
-                        </Button>
-                        <Button color="primary" onPress={onClose}>
-                        Action
-                        </Button>
-                    </ModalFooter>
-                    </>
-                )}
-                </ModalContent>
-            </Modal>
+        <div className='px-2 py-2 flex'>
+            <div className='w-full'>
+                <div className='flex w-full justify-center'>
+                    {[1, 2, 3, 4].map((item: number, index: number) => {
+                        return <div className='w-1/6 mr-2' key={index}>
+                            <Card className="w-100 h-full space-y-5 p-4" radius="lg">
+                                <Skeleton className="rounded-lg">
+                                    <div className="h-24 rounded-lg bg-default-300"></div>
+                                </Skeleton>
+                                <div className="space-y-3">
+                                    <Skeleton className="w-3/5 rounded-lg">
+                                        <div className="h-3 w-3/5 rounded-lg bg-default-200"></div>
+                                    </Skeleton>
+                                    <Skeleton className="w-4/5 rounded-lg">
+                                        <div className="h-3 w-4/5 rounded-lg bg-default-200"></div>
+                                    </Skeleton>
+                                    <Skeleton className="w-2/5 rounded-lg">
+                                        <div className="h-3 w-2/5 rounded-lg bg-default-300"></div>
+                                    </Skeleton>
+                                </div>
+                            </Card>
+                        </div>
+                    })}
+                    <Calendar 
+                        aria-label="Date (Controlled)" 
+                        value={curDate} 
+                        onChange={setCurDate} 
+                    />
+                </div>
+
+                {/* 音乐盒 */}
+                <div className='flex justify-center w-full h-[300px]'>
+                    <MusicBox width={'80%'} height={300}/>
+                </div>
+
+                <div className='flex justify-center items-center w-full h-[200px]'>
+                    <Button onPress={onOpen} className='w-[200px] h-[100px] text-2xl'>叨叨念</Button>
+                    <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop={'blur'} placement={'auto'}
+                        classNames={{
+                            base: "bg-white text-black",
+                            // header: "border-b-[1px] border-[#292f46]",
+                            // footer: "border-t-[1px] border-[#292f46]",
+                            // closeButton: "hover:bg-white/5 active:bg-white/10",
+                        }}
+                    >
+                        <ModalContent>
+                            {(onClose) => (
+                                <>
+                                    <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+                                    <ModalBody>
+                                        <p>
+                                            嗯，慧慧子是个大美女
+                                        </p>
+                                        <p>
+                                            嗯，灏灏子是个大帅哥
+                                        </p>
+                                        <p>
+                                            嗯，他俩简直是天仙配！
+                                        </p>
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <Button color="danger" variant="light" onPress={onClose}>
+                                            关掉我
+                                        </Button>
+                                        <Button color="primary" onPress={onClose}>
+                                            嗯呐
+                                        </Button>
+                                    </ModalFooter>
+                                </>
+                            )}
+                        </ModalContent>
+                    </Modal>
+                </div>
+            </div>
+            
         </div>
     )
 }
