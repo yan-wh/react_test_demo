@@ -5,7 +5,7 @@ import { createBrowserRouter } from "react-router-dom";
 // import { commonRoute } from "@/types/index.ts"
 import App from '../App'; // ts中只支持相对和绝对路径
 import ErrorPage from '../pages/error'
-import Test from '../pages/test'
+import Upload from '../pages/photo-upload'
 // import Contact from '../routes/contact'
 import Home from '../pages/home'
 
@@ -17,7 +17,7 @@ export const router: any = createBrowserRouter([
     children: [
       {
         path: "test",
-        element: <Test />,
+        element: <Upload />,
       },
       {
         path: "home",

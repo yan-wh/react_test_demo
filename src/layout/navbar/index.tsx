@@ -22,13 +22,13 @@ const NavbarComponent = () => {
             classNames={{
                 base: 'py-3',
                 brand: 'text-2xl',
-                item: 'text-2xl',
+                item: 'text-2xl ml-5',
                 
             }}
         >
             <NavbarBrand>
                 <AcmeLogo />
-                <p className="font-bold text-inherit">慧慧子And灏灏子</p>
+                <p className="font-bold text-inherit">武功山五人行</p>
             </NavbarBrand>
             <NavbarContent className="sm:flex gap-4" justify="center">
                 <Dropdown>
@@ -91,12 +91,12 @@ const NavbarComponent = () => {
                 </Dropdown>
                 <NavbarItem>
                     <Link to="/test">
-                        <span>瞬间</span>
+                        <span>照片上传</span>
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
                     <Link to="/home">
-                        <span>纪念</span>
+                        <span>五人行回忆录</span>
                     </Link>
                 </NavbarItem>
             </NavbarContent>

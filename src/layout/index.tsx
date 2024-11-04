@@ -6,16 +6,16 @@ import './index.css'
 
 const Layout = () => {
   return (
-    <div>
-        <div className='navbar-container'>
-            <NavbarComponent />
-        </div>
-        <div className='content'>
-            <Outlet />
-        </div>
-        <div className='footer'>
-            {/* Footer content */}
-        </div>
+    <div className='w-full h-full'>
+      <div className='w-full h-[20%]'>
+        <NavbarComponent />
+      </div>
+      <div className='w-full h-[80%]'>
+        <Outlet />
+      </div>
+      <div className='footer'>
+        {/* Footer content */}
+      </div>
     </div>
     
   );
