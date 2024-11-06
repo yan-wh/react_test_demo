@@ -41,6 +41,29 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
+
+// 设置静态文件服务器，传递一个路径给 express.static 时，它将使得该路径下的文件可以通过 HTTP 服务器直接访问
+app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// 设置文件存储路径
+const staticDir = path.join(__dirname, 'uploads');
+
+// 提供一个API来列出所有图片
+app.get('/api/getImagesNames', (req, res) => {
+    fs.readdir(staticDir, (err, files) => {
+      if (err) {
+        res.status(500).send('Server error');
+        return;
+      }
+  
+      // 过滤出图片文件
+      const images = files.filter(file => /\.(jpg|jpeg|png|gif)$/i.test(file));
+  
+      // 返回图片文件列表
+      res.json(images);
+    });
+});
+
 const upload = multer({ dest: 'uploads/chunks/' }); // 设置分片存储的目录
 
 // 存储分片信息，实际应用中可能需要使用数据库存储

@@ -70,37 +70,63 @@ function getConfig3(config: IConfig13) {
 // 类型断言一般用于你知道这个类型是什么，但是编译器不知道的情况
 // 类型守卫一般用于你知道这个类型是什么，但是编译器不知道的情况
 
-import { 
-    Button, 
-    Modal, 
-    ModalContent, 
-    ModalHeader, 
-    ModalBody, 
-    ModalFooter, 
-    useDisclosure, 
-    Card, 
-    Skeleton, 
-    Calendar,  
-} from '@nextui-org/react';
-import { useState } from 'react'
-import { parseDate } from '@internationalized/date'
-import MusicBox from '../../components/MusicBox'
+// import { 
+//     Button, 
+//     Modal, 
+//     ModalContent, 
+//     ModalHeader, 
+//     ModalBody, 
+//     ModalFooter, 
+//     useDisclosure, 
+//     Card, 
+//     Skeleton, 
+//     Calendar,  
+// } from '@nextui-org/react';
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+// import { parseDate } from '@internationalized/date'
+// import MusicBox from '../../components/MusicBox'
+
+import Gallery from '../../components/photo-show';
 
 interface IConfig {
     name: string
     age: number
 }
 
+// 定义图片类型
+interface Photo {
+    src: string;
+    height?: string;
+    gridRow?: string;
+}
+
 
 
 export default function Home() {
-    const {isOpen, onOpen, onOpenChange} = useDisclosure();
-    const [ config, setConfig ] = useState<IConfig>({name: '', age: 0})
-    let [curDate, setCurDate] = useState(parseDate(new Date().toISOString().split('T')[0]))
+    // const {isOpen, onOpen, onOpenChange} = useDisclosure();
+    // let [curDate, setCurDate] = useState(parseDate(new Date().toISOString().split('T')[0]))
+    const [ photos, setPhotos ] = useState<Photo[]>([])
+
+    useEffect(() => {
+        axios.get('/api/getImagesNames').then((res) => {
+            // console.log(res.data)
+            res.data.map((item: string) => {
+                setPhotos((prev) => {
+                    return [...prev, { 
+                        src: `/api/uploads/${item}`,
+                        height: '',
+                        gridRow: ''
+                    }]
+                })
+            })
+        })
+    }, [])
+
     return (
-        <div className='px-2 py-2 flex'>
-            <div className='w-full'>
-                <div className='flex w-full justify-center'>
+        <div className='w-full h-full px-2 py-2 flex'>
+            <div className='w-full h-full'>
+                {/* <div className='flex w-full justify-center'>
                     {[1, 2, 3, 4].map((item: number, index: number) => {
                         return <div className='w-1/6 mr-2' key={index}>
                             <Card className="w-100 h-full space-y-5 p-4" radius="lg">
@@ -126,14 +152,14 @@ export default function Home() {
                         value={curDate} 
                         onChange={setCurDate} 
                     />
-                </div>
+                </div> */}
 
                 {/* 音乐盒 */}
-                <div className='flex justify-center w-full h-[300px]'>
+                {/* <div className='flex justify-center w-full h-[300px]'>
                     <MusicBox width={'80%'} height={300}/>
-                </div>
+                </div> */}
 
-                <div className='flex justify-center items-center w-full h-[200px]'>
+                {/* <div className='flex justify-center items-center w-full h-[200px]'>
                     <Button onPress={onOpen} className='w-[200px] h-[100px] text-2xl'>叨叨念</Button>
                     <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop={'blur'} placement={'auto'}
                         classNames={{
@@ -170,6 +196,10 @@ export default function Home() {
                             )}
                         </ModalContent>
                     </Modal>
+                </div> */}
+
+                <div className='w-full h-full'>
+                    <Gallery imagePaths={photos} />
                 </div>
             </div>
             

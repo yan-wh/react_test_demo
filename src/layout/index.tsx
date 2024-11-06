@@ -7,7 +7,7 @@ import './index.css'
 const Layout = () => {
   return (
     <div className='w-full h-full'>
-      <div className='w-full h-[20%]'>
+      <div className='w-full'>
         <NavbarComponent />
       </div>
       <div className='w-full h-[80%]'>

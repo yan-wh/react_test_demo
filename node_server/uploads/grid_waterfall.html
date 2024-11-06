@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        :root {
+            --s: 10px;
+        }
+        .waterfall {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            column-gap: var(--s);
+            /* 由于每一行的高度是固定的且很小，所以在视觉上，形成了瀑布流的效果 */
+            grid-auto-rows: var(--s); /* 每一行的高度是固定的，所以使用grid-auto-rows */
+            justify-content: center;
+            padding: var(--s);
+        }
+        .waterfall > .item {
+            width: 100%;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, .7);
+        }
+    </style>
+</head>
+<body>
+    <div class="waterfall">
+        
+    </div>
+</body>
+<script type="text/javascript">
+    const waterfall = document.querySelector('.waterfall');
+    const gap = 10;
+    const imageWidth = 300;
+
+    const images = [
+        './DSC03394.JPG',
+        './DSC03528.JPG',
+        './DSC03586.JPG',
+        './DSC03460.JPG',
+        './DSC03438.JPG',
+        './DSC03416.JPG',
+        
+        './DSC03394.JPG',
+        './DSC03528.JPG',
+        // './DSC03586.JPG',
+        // './DSC03460.JPG',
+        
+    ];
+
+    const createImage = async(src) => {
+        const e = document.createElement('div');
+        e.classList.add('item');
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = src;
+            img.onload = () => {
+                const h = imageWidth * img.height / img.width;
+                e.style.height = `${Math.ceil(h / gap) * gap}px`;
+                e.style.gridRow = `span ${Math.ceil(h / gap) + 1}`;
+                e.style.backgroundImage = `url(${src})`;
+                e.style.backgroundSize = 'cover';
+                resolve(e);
+            }
+            img.onerror = reject;
+        })
+    }
+
+    document.addEventListener('DOMContentLoaded', async() => {
+        for (const src of images) {
+            const e = await createImage(src);
+            waterfall.appendChild(e);
+        }
+    })
+
+
+</script>
+</html>
