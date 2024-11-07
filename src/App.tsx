@@ -25,3 +25,28 @@ const App: React.FC = () => {
 };
 
 export default App;
+
+// docker run -d --name my-alpine \
+// -p 8081:80 \
+// -v /opt/share-images:/usr/share/images my-alpine
+
+// nginx容器构建
+// docker run -d -p 8080:80 -v /opt/nginx/config:/etc/nginx/conf.d -v /opt/nginx/html:/usr/share/nginx/html --name my-nginx my-nginx
+
+// nodejs容器构建
+// docker run -d -p 8082:3000 -v /opt/nodejs-app:/app --name my-nodejs my-nodejs
+
+/**
+ * 8080为web服务端口，8081为文件系统端口，8082为node服务端口
+ * 0、初始化文件系统
+ * 
+ * 步骤：
+ * docker run -d --name my-alpine \
+ * -p 8081:80 \
+ * -v /opt/share-images:/usr/share/images my-alpine
+ * 
+ * 
+ * 1、nginx容器关联到文件系统
+ * 2、nginx容器关联到docker网络
+ * 3、nginx容器关联到docker服务
+ */
