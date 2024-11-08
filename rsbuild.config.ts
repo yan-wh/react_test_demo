@@ -8,7 +8,7 @@ export default defineConfig({
     proxy: {
       // http://localhost:3000/api -> http://localhost:3000/api
       // http://localhost:3000/api/foo -> http://localhost:3000/api/foo
-      '/api': 'http://localhost:5001',
+      '/api': 'http://localhost:3000',
     },
   },
 });

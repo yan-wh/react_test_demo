@@ -1,11 +1,27 @@
 import './App.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Layout from './layout';
 
 // 应用组件
 const App: React.FC = () => {
+
+  useEffect(() => {
+    // 获取当前页面宽度
+    const width = document.documentElement.clientWidth;
+    console.log('初始页面宽度：', width);
+    // 监听页面宽度变化
+    window.onresize = () => {
+      const newWidth = document.documentElement.clientWidth;
+      console.log('视窗大小改变：', newWidth);
+      // if (newWidth !== width) {
+      //   window.location.reload();
+      // }
+    }
+  }, [])
+
   return (
-    <div className="common-dark text-foreground bg-background App">
+    // <div className="common-dark text-foreground bg-background App">
+    <div className="App">
       <Layout />
     </div>
 

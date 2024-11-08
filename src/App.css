@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@media screen and (max-width: 500px){
+  html {
+    font-size: 6px;
+  }
+}
+
+@media screen and (min-width: 501px) and (max-width: 768px){
+  html {
+    font-size: 9px;
+  }
+}
+
+@media screen and (min-width: 769px){
+  html {
+    font-size: 12px;
+  }
+}
+
 .App {
   width: 100vw;
   height: 100vh;

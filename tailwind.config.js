@@ -25,8 +25,8 @@ module.exports = {
     {
       prefix: "nextui", // prefix for themes variables
       addCommonColors: false, // override common colors (e.g. "blue", "green", "pink").
-      // defaultTheme: "dark", // default theme from the themes object
-      // defaultExtendTheme: "dark", // default theme to extend on custom themes
+      defaultTheme: "dark", // default theme from the themes object
+      defaultExtendTheme: "dark", // default theme to extend on custom themes
       layout: { // common layout tokens (applied to all themes)
         dividerWeight: "1px", // h-divider the default height applied to the divider component
         disabledOpacity: 0.5, // this value is applied as opacity-[value] when the component is disabled
