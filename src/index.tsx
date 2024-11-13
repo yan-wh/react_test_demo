@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import {NextUIProvider} from "@nextui-org/react";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./route";
+import store from './store/store'
+import { Provider } from 'react-redux'
 
 const rootEl = document.getElementById('root');
 if (rootEl) {
@@ -15,7 +17,9 @@ if (rootEl) {
           <App />
         </main> */}
         {/* 使用 RouterProvider 并将 router 实例传递给它 */}
-        <RouterProvider router={router} />
+        <Provider store={store}>
+          <RouterProvider router={router} />
+        </Provider>
       </NextUIProvider>
     </React.StrictMode>,
   );

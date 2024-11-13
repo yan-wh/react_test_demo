@@ -2,14 +2,14 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Button,
-     DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar } from "@nextui-org/react";
+    //  DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar 
+    } from "@nextui-org/react";
 // import { ChevronDown, Lock, Activity, Flash, Server, TagUser, Scale } from "./icons";
 import { AcmeLogo } from "./acmeLogo";
 import './index.css'
 
 const NavbarComponent = () => {
     const [isMenuOpen, setIsMenuOpen] = useState<Boolean>(false);
-    const [clickItem, setClickItem] = useState<Boolean>(false);
 
     const menuItems = [
         ["图片上传", "/test"],
@@ -18,18 +18,11 @@ const NavbarComponent = () => {
     ];
 
     return (
-        <Navbar 
-            onMenuOpenChange={(open) => {
-                console.log('open', open)
-                setIsMenuOpen(open)
-                // setClickItem(!clickItem)
-            }}
-        >
+        <Navbar onMenuOpenChange={setIsMenuOpen}>
             <NavbarContent>
                 <NavbarMenuToggle
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                     className="sm:hidden"
-                    // data-open={clickItem}
                 />
                 <NavbarBrand>
                     <AcmeLogo />

@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
-import { Button, Image } from '@nextui-org/react'
+import { Button, Image as NextUIImage } from '@nextui-org/react'
+import Compressor from 'compressorjs';
+import { useSelector, useDispatch } from 'react-redux'
+import { setState, setLoadingStatus } from '../../store/index'
 import './index.css'
 
 type UploadProps = {};
@@ -9,8 +12,49 @@ type UploadProps = {};
 const Upload: React.FC<UploadProps> = () => {
   const [file, setFile] = useState<(File | null)[]>([]);
   const [uploadImgList, setUploadImgList] = useState<string[]>([]);
+  const dispatch = useDispatch()
+
+  const photoCompress = async (curFile: File) => {
+    if (curFile) {
+      console.log('开始压缩图片')
+      const compressor = new Compressor(curFile, {
+        quality: 0.6, // 设置压缩质量
+        success(result) {
+          // console.log('压缩成功', result)
+          // 压缩成功后，result为压缩后的Blob对象
+          // 接下来可以将Blob转换为DataURL，再转换为WebP格式
+          const reader = new FileReader();
+          reader.onload = function (e: any) {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = function () {
+              // 使用canvas将图片转换为WebP格式
+              const canvas = document.createElement('canvas');
+              canvas.width = img.width;
+              canvas.height = img.height;
+              const ctx = canvas.getContext('2d');
+              if (ctx) {
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob((blob) => {
+                  // blob为WebP格式的Blob对象
+                  // 可以使用FileReader读取，或者直接通过FormData上传
+                  console.log('压缩后的图片', blob);
+                  dispatch(setLoadingStatus(false));
+                }, 'image/webp');
+              }
+            };
+          };
+          reader.readAsDataURL(result);
+        },
+        error(err) {
+          console.error(err.message);
+        },
+      });
+    }
+  }
 
   const onDrop = (acceptedFiles: File[]) => {
+    dispatch(setLoadingStatus(true)); // 设置加载状态为true
     const curFile: File = acceptedFiles[0];
     setFile((prevFile) => {
       // 确保prevFile是一个数组
@@ -22,6 +66,7 @@ const Upload: React.FC<UploadProps> = () => {
       }
     });
     console.log('拖入文件')
+    photoCompress(curFile);
 
     const reader = new FileReader();
       
@@ -38,7 +83,15 @@ const Upload: React.FC<UploadProps> = () => {
   };
 
   const uploadFile = async () => {
-    if (!file.length) return;
+    if (!file.length) {
+      dispatch(setState({
+        msgStatus: true,
+        msgTitle: '提示',
+        msgInfo: '请先上传图片',
+        msgTimeout: 2500
+      }));
+      return
+    }
 
     const filePromise: Promise<void>[] = file.map(async (item) => {
       if (item) {
@@ -100,7 +153,7 @@ const Upload: React.FC<UploadProps> = () => {
             uploadImgList.map((item: any, index: number) => {
               return (
                 <div className={`w-1/3 ml-1`} key={index}>
-                  <Image
+                  <NextUIImage
                     src={item}
                     alt="NextUI Album Cover"
                     width={'100%'}

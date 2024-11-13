@@ -1,5 +1,10 @@
 type commonType = string | number | boolean | null | undefined | object | any[] | Function;
 
+type messageType = {
+  title?: string;
+  content: string;
+  timeOut?: number;
+}
 
 
 type commonRoute = {
@@ -11,6 +16,7 @@ type commonRoute = {
 };
 
 export type {
+  messageType,
   commonType,
   commonRoute
 }
