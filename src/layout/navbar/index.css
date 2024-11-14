@@ -3,7 +3,12 @@
 
 }
 
-.my-text {
-    /* font-size: var(--nextui-font-size-large); */
-    font-size: 20px;
+
+.navbar-toggle[data-open="true"] {
+    /* Styles for when the menu is open */
+}
+
+.toggle-navbarmenu {
+    height: 20rem !important;
+    box-shadow: 1px 1px 5px 1px rgba(240, 240, 240, 0.2) !important;
 }

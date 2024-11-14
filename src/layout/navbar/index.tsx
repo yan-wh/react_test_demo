@@ -9,16 +9,19 @@ import { AcmeLogo } from "./acmeLogo";
 import './index.css'
 
 const NavbarComponent = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState<Boolean>(false);
+    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
     const menuItems = [
+        ["首页", "/"],
         ["图片上传", "/test"],
         ["武功山回忆录", "/home"],
         "登出",
     ];
 
     return (
-        <Navbar onMenuOpenChange={setIsMenuOpen}>
+        <Navbar 
+            isMenuOpen={isMenuOpen}
+            onMenuOpenChange={setIsMenuOpen}>
             <NavbarContent>
                 <NavbarMenuToggle
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -31,6 +34,11 @@ const NavbarComponent = () => {
             </NavbarContent>
 
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
+                <NavbarItem>
+                    <Link to="/">
+                        <span>首页</span>
+                    </Link>
+                </NavbarItem>
                 <NavbarItem>
                     <Link to="/test">
                         <span>照片上传</span>
@@ -49,7 +57,7 @@ const NavbarComponent = () => {
                     </Button>
                 </NavbarItem>
             </NavbarContent>
-            <NavbarMenu>
+            <NavbarMenu className='toggle-navbarmenu'>
                 {menuItems.map((item, index) => (
                     <NavbarMenuItem key={`${item[0]}-${index}`}>
                         <Link
@@ -58,6 +66,9 @@ const NavbarComponent = () => {
                             }
                             className="w-full"
                             to={item[1]}
+                            onClick={() => {
+                                setIsMenuOpen(false)
+                            }}
                         >
                             {item[0]}
                         </Link>
