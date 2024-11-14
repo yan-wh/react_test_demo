@@ -74,6 +74,9 @@ app.post('/api/upload', upload.single('chunk'), async (req, res) => {
         const fileChunk = req.file;
         const { chunkIndex, totalChunks, filename } = req.body;
 
+        // console.log('fileChunk', fileChunk)
+        // console.log('req.body', req.body)
+
         console.log(`Received chunk ${chunkIndex} of${totalChunks} for file ${filename}`);
 
         // 检查分片信息
@@ -115,7 +118,9 @@ app.post('/api/upload', upload.single('chunk'), async (req, res) => {
                 await processChunks(i);
             }
 
-            if (chunksProcessed === totalChunks) {
+            // console.log('chunksProcessed', chunksProcessed)
+            // console.log('totalChunks', totalChunks)
+            if (chunksProcessed == totalChunks) {
                 // 所有分片处理完成后，关闭写入流
                 writeStream.end();
 

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import { Button, Image as NextUIImage } from '@nextui-org/react'
-import Compressor from 'compressorjs';
+// import Compressor from 'compressorjs';
+import imageCompression from 'browser-image-compression';
 import { useSelector, useDispatch } from 'react-redux'
 import { setState, setLoadingStatus } from '../../store/index'
 import './index.css'
@@ -12,44 +13,76 @@ type UploadProps = {};
 const Upload: React.FC<UploadProps> = () => {
   const [file, setFile] = useState<(File | null)[]>([]);
   const [uploadImgList, setUploadImgList] = useState<string[]>([]);
+  const [photoBlobArr, setPhotoBlobArr] = useState<(object)[]>([]);
   const dispatch = useDispatch()
 
   const photoCompress = async (curFile: File) => {
     if (curFile) {
-      console.log('开始压缩图片')
-      const compressor = new Compressor(curFile, {
-        quality: 0.6, // 设置压缩质量
-        success(result) {
-          // console.log('压缩成功', result)
-          // 压缩成功后，result为压缩后的Blob对象
-          // 接下来可以将Blob转换为DataURL，再转换为WebP格式
-          const reader = new FileReader();
-          reader.onload = function (e: any) {
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = function () {
-              // 使用canvas将图片转换为WebP格式
-              const canvas = document.createElement('canvas');
-              canvas.width = img.width;
-              canvas.height = img.height;
-              const ctx = canvas.getContext('2d');
-              if (ctx) {
-                ctx.drawImage(img, 0, 0);
-                canvas.toBlob((blob) => {
-                  // blob为WebP格式的Blob对象
-                  // 可以使用FileReader读取，或者直接通过FormData上传
-                  console.log('压缩后的图片', blob);
-                  dispatch(setLoadingStatus(false));
-                }, 'image/webp');
-              }
-            };
-          };
-          reader.readAsDataURL(result);
-        },
-        error(err) {
-          console.error(err.message);
-        },
-      });
+      // console.log('开始压缩图片')
+      // 使用 imageCompression 压缩效果最好，只是时间稍长一点点
+      const imageFile = curFile;
+      console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
+      console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
+
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true
+      }
+      try {
+        const compressedFile = await imageCompression(imageFile, options);
+        let blobObj = {
+          name: curFile.name,
+          blob: compressedFile,
+        }
+        setPhotoBlobArr((prev) => [...prev, blobObj]);
+        dispatch(setLoadingStatus(false));
+        console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+        console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+      } catch (error) {
+        console.log(error);
+      }
+
+      // const compressor = new Compressor(curFile, {
+      //   quality: 0.6, // 设置压缩质量
+      //   success(result) {
+      //     // console.log('压缩成功', result)
+      //     // 压缩成功后，result为压缩后的Blob对象
+      //     // 接下来可以将Blob转换为DataURL，再转换为WebP格式
+      //     const reader = new FileReader();
+      //     reader.onload = function (e: any) {
+      //       const img = new Image();
+      //       img.src = e.target.result;
+      //       img.onload = function () {
+      //         // 使用canvas将图片转换为WebP格式
+      //         const canvas = document.createElement('canvas');
+      //         canvas.width = img.width;
+      //         canvas.height = img.height;
+      //         const ctx = canvas.getContext('2d');
+      //         if (ctx) {
+      //           ctx.drawImage(img, 0, 0);
+      //           canvas.toBlob((blob) => {
+      //             // blob为WebP格式的Blob对象
+      //             // 可以使用FileReader读取，或者直接通过FormData上传
+      //             console.log('压缩后的图片', blob);
+      //             // 将转换后的blob先存入数组中
+      //             let blobObj = {
+      //               name: curFile.name,
+      //               blob,
+      //             }
+      //             setPhotoBlobArr((prev) => [...prev, blobObj]);
+      //             dispatch(setLoadingStatus(false));
+      //           }, 'image/webp');
+      //         }
+      //       };
+      //     };
+      //     reader.readAsDataURL(result);
+      //   },
+      //   error(err) {
+      //     console.error(err.message);
+      //   },
+      // });
     }
   }
 
@@ -93,47 +126,76 @@ const Upload: React.FC<UploadProps> = () => {
       return
     }
 
-    const filePromise: Promise<void>[] = file.map(async (item) => {
-      if (item) {
-        return fileDispose(item); // 确保item不是null
+    const filePromise: Promise<void>[] = photoBlobArr.map((blobObj: object, index) => {
+      if (blobObj.blob) {
+        return fileDispose(blobObj.blob, blobObj.name); // 确保item不是null
       } else {
         // 处理item为null的情况，例如可以抛出错误或返回一个解决的Promise
-        throw new Error('Item cannot be null');
+        throw new Error('blob cannot be null');
         // 或者
         // return Promise.resolve();
       }
     })
 
     Promise.all(filePromise).then(() => {
-      alert('上传成功！');
+      dispatch(setState({
+        msgStatus: true,
+        msgTitle: '提示',
+        msgInfo: '上传成功',
+        msgTimeout: 2500
+      }));
     });
 
   };
 
-  const fileDispose = async(file: File) => {
-    const chunkSize = 1 * 1024 * 1024; // 分片大小，这里以1MB为例
-    const chunks = Math.ceil(file.size / chunkSize);
-
+  const fileDispose = async (blob: Blob, filename: string) => {
+    const chunkSize = 1 * 100 * 1024; // 分片大小，这里以1MB为例
+    const chunks = Math.ceil(blob.size / chunkSize);
+  
     for (let i = 0; i < chunks; i++) {
-      const chunk = file.slice(i * chunkSize, (i + 1) * chunkSize);
+      const chunk = blob.slice(i * chunkSize, (i + 1) * chunkSize);
       const formData = new FormData();
-      formData.append('chunk', chunk);
-      formData.append('filename', file.name);
+      formData.append('chunk', chunk, `${filename}-${i}`); // 使用传递的文件名和分片索引
+      formData.append('filename', filename);
       formData.append('chunkIndex', i.toString());
       formData.append('totalChunks', chunks.toString());
-
+  
       try {
-        axios.post('/api/upload', formData, {
+        await axios.post('/api/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
-
       } catch (error) {
         console.error('Error uploading chunk:', error);
       }
     }
-  }
+  };
+
+  // const fileDispose = async(file: File) => {
+  //   const chunkSize = 1 * 1024 * 1024; // 分片大小，这里以1MB为例
+  //   const chunks = Math.ceil(file.size / chunkSize);
+
+  //   for (let i = 0; i < chunks; i++) {
+  //     const chunk = file.slice(i * chunkSize, (i + 1) * chunkSize);
+  //     const formData = new FormData();
+  //     formData.append('chunk', chunk);
+  //     formData.append('filename', file.name);
+  //     formData.append('chunkIndex', i.toString());
+  //     formData.append('totalChunks', chunks.toString());
+
+  //     try {
+  //       axios.post('/api/upload', formData, {
+  //         headers: {
+  //           'Content-Type': 'multipart/form-data',
+  //         },
+  //       });
+
+  //     } catch (error) {
+  //       console.error('Error uploading chunk:', error);
+  //     }
+  //   }
+  // }
 
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
