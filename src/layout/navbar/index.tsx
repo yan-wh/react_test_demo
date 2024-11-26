@@ -49,6 +49,11 @@ const NavbarComponent = () => {
                         <span>五人行回忆录</span>
                     </Link>
                 </NavbarItem>
+                <NavbarItem isActive>
+                    <Link to="/gsap">
+                        <span>GSAP</span>
+                    </Link>
+                </NavbarItem>
             </NavbarContent>
             <NavbarContent justify="end">
                 <NavbarItem>

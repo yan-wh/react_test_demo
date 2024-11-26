@@ -8,6 +8,7 @@ import ErrorPage from '../pages/error'
 import Upload from '../pages/photo-upload'
 // import Contact from '../routes/contact'
 import Home from '../pages/home'
+import GsapComp from '../pages/gsap'
 
 export const router: any = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ export const router: any = createBrowserRouter([
         path: "home",
         element: <Home />,
       },
+      {
+        path: "gsap",
+        element: <GsapComp />,
+      }
     ],
   }
   // ...其他路由配置
