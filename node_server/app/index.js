@@ -102,6 +102,47 @@ const upload = multer({ dest: '../uploads/chunks/' }); // 设置分片存储的�
 // 存储分片信息，实际应用中可能需要使用数据库存储
 const fileChunks = {};
 
+
+// 删除特定目录下的所有文件
+const delDir = (directory) => {
+    // 读取文件夹内容
+    try {
+        fs.readdir(directory, (err, files) => {
+            if (err) {
+                console.error('Error reading directory:', err);
+                return;
+            }
+    
+            // 遍历文件列表
+            files.forEach((file) => {
+                // 构建完整的文件路径
+                const filePath = path.join(directory, file);
+    
+                // 检查文件是否是一个目录
+                fs.stat(filePath, (err, stats) => {
+                    if (err) {
+                        console.error('Error stating file:', err);
+                        return;
+                    }
+    
+                    // 如果是文件，则删除
+                    if (stats.isFile()) {
+                        fs.unlink(filePath, (err) => {
+                            if (err) {
+                                console.error('Error deleting file:', err);
+                            } else {
+                                console.log(`Deleted file: ${filePath}`);
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    } catch (error) {
+        console.error('删除文件夹中的文件时出错:', error);
+    }
+}
+
 app.post('/api/upload', upload.single('chunk'), async (req, res) => {
     const fileChunk = req.file;
     const { chunkIndex, totalChunks, filename } = req.body;
@@ -160,6 +201,8 @@ app.post('/api/upload', upload.single('chunk'), async (req, res) => {
                     console.log('分片合并完成');
                     res.send({ message: 'File uploaded and merged successfully' });
                 });
+                // 删除掉chunks文件夹内多余的分片数据
+                delDir(path.join(__dirname, `../uploads/chunks`));
             }
         } else {
             res.send({ message: 'Chunk uploaded successfully' });
