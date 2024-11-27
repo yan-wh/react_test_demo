@@ -4,7 +4,10 @@ import axios from 'axios';
 import { Button, Image as NextUIImage } from '@nextui-org/react'
 // import Compressor from 'compressorjs';
 import imageCompression from 'browser-image-compression';
-import { useSelector, useDispatch } from 'react-redux'
+import { 
+  // useSelector, 
+  useDispatch 
+} from 'react-redux'
 import { setState, setLoadingStatus } from '../../store/index'
 import './index.css'
 
@@ -207,7 +210,7 @@ const Upload: React.FC<UploadProps> = () => {
 
   return (
     <div className='w-full h-full flex flex-col justify-center items-center'>
-      <div className='w-1/4 h-1/3 flex' {...getRootProps()} style={{ border: '2px dashed #ccc', padding: '20px', cursor: 'pointer' }}>
+      <div className='fileInputContainer w-1/4 h-1/3 flex' {...getRootProps()} style={{ border: '2px dashed #ccc', padding: '20px', cursor: 'pointer' }}>
         <input id="imageInput" {...getInputProps()} />
         <p style={{ display: uploadImgList.length > 0 ? 'none' : 'block' }}>拖拽文件到这里或者点击选择文件</p>
         <div className='w-full h-full flex'>
@@ -226,7 +229,7 @@ const Upload: React.FC<UploadProps> = () => {
           }
         </div>
       </div>
-      <Button className='w-[150px] h-[100px] mt-10' color="secondary" onClick={uploadFile}>
+      <Button className='uploadBtn w-1/4 h-[100px] mt-10' color="secondary" onClick={uploadFile}>
         上传文件
       </Button>
     </div>

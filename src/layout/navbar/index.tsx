@@ -12,9 +12,10 @@ const NavbarComponent = () => {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
     const menuItems = [
-        ["首页", "/"],
-        ["图片上传", "/test"],
-        ["武功山回忆录", "/home"],
+        ["首页", "/home"],
+        ["图片上传", "/upload"],
+        ["武功山回忆录", "/gallery"],
+        ["GSAP", "/gsap"],
         "登出",
     ];
 
@@ -35,17 +36,17 @@ const NavbarComponent = () => {
 
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarItem>
-                    <Link to="/">
+                    <Link to="/home">
                         <span>首页</span>
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link to="/test">
+                    <Link to="/upload">
                         <span>照片上传</span>
                     </Link>
                 </NavbarItem>
                 <NavbarItem isActive>
-                    <Link to="/home">
+                    <Link to="/gallery">
                         <span>五人行回忆录</span>
                     </Link>
                 </NavbarItem>

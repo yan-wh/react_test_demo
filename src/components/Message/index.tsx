@@ -3,18 +3,13 @@ import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { setMsgStatus } from '../../store/index'
 import './index.css'
+import { anyProps } from '../../types'
 
-type indexProps = {
-  [key: string]: any
-}
-interface indexState {
-  index: indexProps
-}
 
 const Message = () => {
   const [msgClass, setMsgClass] = useState<string>('')
 
-  const {msgStatus, msgTitle = '提示', msgInfo = '默认提示信息', msgTimeout = 2500} = useSelector((state: indexState) => {
+  const {msgStatus, msgTitle = '提示', msgInfo = '默认提示信息', msgTimeout = 2500} = useSelector((state: anyProps) => {
     return {
       msgStatus: state.index.msgStatus,
       msgTitle: state.index.msgTitle,

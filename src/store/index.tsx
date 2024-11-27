@@ -17,15 +17,18 @@ const initialState: IndexState = {
   msgTitle: '',
   contentLoading: false, // 内容区域加载状态
   msgTimeout: 0, // 消息提示框定时器
+  delStatus: false // 删除图片状态
 };
 
 export const indexStore = createSlice({
   name: 'index',
   initialState,
   reducers: {
+    // 消息提示框状态
     setMsgStatus: (state, action: PayloadAction<boolean>) => {
       state.msgStatus = action.payload;
     },
+    // body部分loading状态
     setLoadingStatus: (state, action: PayloadAction<boolean>) => {
       state.contentLoading = action.payload;
     },

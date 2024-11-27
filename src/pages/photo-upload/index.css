@@ -1,2 +1,11 @@
+@media screen and (max-width: 500px) {
+    .fileInputContainer {
+        width: 60%;
+        height: 25%;
+    }
 
-  
+    .uploadBtn {
+        width: 60%;
+        height: 10%
+    }
+}

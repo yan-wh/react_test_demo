@@ -4,10 +4,11 @@
 import { createBrowserRouter } from "react-router-dom";
 // import { commonRoute } from "@/types/index.ts"
 import App from '../App'; // ts中只支持相对和绝对路径
+import Home from '../pages/home'
 import ErrorPage from '../pages/error'
 import Upload from '../pages/photo-upload'
 // import Contact from '../routes/contact'
-import Home from '../pages/home'
+import Gallery from '../pages/gallery'
 import GsapComp from '../pages/gsap'
 
 export const router: any = createBrowserRouter([
@@ -17,12 +18,16 @@ export const router: any = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "test",
+        path: "home",
+        element: <Home />,
+      },
+      {
+        path: "upload",
         element: <Upload />,
       },
       {
-        path: "home",
-        element: <Home />,
+        path: "gallery",
+        element: <Gallery />,
       },
       {
         path: "gsap",

@@ -9,6 +9,7 @@ export default defineConfig({
       // http://localhost:3000/api -> http://localhost:3000/api
       // http://localhost:3000/api/foo -> http://localhost:3000/api/foo
       '/api': 'http://localhost:3000',
+      // '/api': 'http://8.137.122.110:8082',
     },
   },
 });
