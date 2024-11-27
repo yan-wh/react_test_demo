@@ -48,6 +48,39 @@ app.use('/api/uploads', express.static(path.join(__dirname, '../uploads')));
 // 设置文件存储路径
 const staticDir = path.join(__dirname, '../uploads');
 
+const delImg = (filename) => {
+    console.log('删除的文件名：', filename)
+    const filePath = path.join(staticDir, filename);
+
+    return new Promise((resolve, reject) => {
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                reject(false);
+            } else {
+                resolve(true);
+            }
+        });
+    })
+}
+
+// 提供删除操作
+app.delete('/api/deleteImage/:filename', async(req, res) => {
+    const filename = req.params.filename;
+    const sign = await delImg(filename);
+    if (!sign) {
+        if (err) {
+            res.status(500).send('Server error');
+            return;
+        }
+    } else {
+        res.send({
+            status: true,
+            message: '文件删除成功。',
+            filename: filename
+        });
+    }
+})
+
 // 提供一个API来列出所有图片
 app.get('/api/getImagesNames', (req, res) => {
     fs.readdir(staticDir, (err, files) => {
@@ -70,10 +103,9 @@ const upload = multer({ dest: '../uploads/chunks/' }); // 设置分片存储的�
 const fileChunks = {};
 
 app.post('/api/upload', upload.single('chunk'), async (req, res) => {
+    const fileChunk = req.file;
+    const { chunkIndex, totalChunks, filename } = req.body;
     try {
-        const fileChunk = req.file;
-        const { chunkIndex, totalChunks, filename } = req.body;
-
         // console.log('fileChunk', fileChunk)
         // console.log('req.body', req.body)
 
@@ -135,7 +167,8 @@ app.post('/api/upload', upload.single('chunk'), async (req, res) => {
     } catch (error) {
         // 错误处理逻辑
         console.error(error);
-        res.status(500).send({ message: 'Internal Server Error' });
+        await delImg(filename); // 若合并分片或文件存在问题，删除已上传的分片或文件
+        res.status(500).send({ message: `${error}` });
     }
 });
 
