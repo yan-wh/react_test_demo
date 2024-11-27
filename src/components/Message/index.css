@@ -19,6 +19,13 @@
     z-index: 1000;
 }
 
+@media screen and (max-width: 500px) {
+  .message {
+    width: 30%;
+    height: 7%;
+  }
+}
+
 /* 定义动画 */
 @keyframes slideInFromTop {
     from {

@@ -202,7 +202,7 @@ app.post('/api/upload', upload.single('chunk'), async (req, res) => {
                     res.send({ message: 'File uploaded and merged successfully' });
                 });
                 // 删除掉chunks文件夹内多余的分片数据
-                delDir(path.join(__dirname, `../uploads/chunks`));
+                // delDir(path.join(__dirname, `../uploads/chunks`));
             }
         } else {
             res.send({ message: 'Chunk uploaded successfully' });
@@ -210,7 +210,7 @@ app.post('/api/upload', upload.single('chunk'), async (req, res) => {
     } catch (error) {
         // 错误处理逻辑
         console.error(error);
-        await delImg(filename); // 若合并分片或文件存在问题，删除已上传的分片或文件
+        // await delImg(filename); // 若合并分片或文件存在问题，删除已上传的分片或文件
         res.status(500).send({ message: `${error}` });
     }
 });

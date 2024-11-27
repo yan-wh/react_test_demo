@@ -91,31 +91,32 @@ const Upload: React.FC<UploadProps> = () => {
 
   const onDrop = (acceptedFiles: File[]) => {
     dispatch(setLoadingStatus(true)); // 设置加载状态为true
-    const curFile: File = acceptedFiles[0];
-    setFile((prevFile) => {
-      // 确保prevFile是一个数组
-      if (Array.isArray(prevFile)) {
-        return [...prevFile, curFile];
-      } else {
-        // 如果prevFile不是数组，则返回一个新数组，包含当前文件
-        return [curFile];
-      }
-    });
-    console.log('拖入文件')
-    photoCompress(curFile);
-
-    const reader = new FileReader();
+    acceptedFiles.forEach((curFile: File) => {
+      setFile((prevFile) => {
+        // 确保prevFile是一个数组
+        if (Array.isArray(prevFile)) {
+          return [...prevFile, curFile];
+        } else {
+          // 如果prevFile不是数组，则返回一个新数组，包含当前文件
+          return [curFile];
+        }
+      });
+      console.log('拖入文件')
+      photoCompress(curFile);
+  
+      const reader = new FileReader();
+        
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        if (e.target?.result) {
+          // console.log('读取文件成功', e.target.result);
+          const url = e.target?.result.toString();
+          setUploadImgList((prev) => [...prev, url]);
+        }
+      };
       
-    reader.onload = (e: ProgressEvent<FileReader>) => {
-      if (e.target?.result) {
-        // console.log('读取文件成功', e.target.result);
-        const url = e.target?.result.toString();
-        setUploadImgList((prev) => [...prev, url]);
-      }
-    };
-    
-    // 读取文件内容
-    reader.readAsDataURL(acceptedFiles[0]);
+      // 读取文件内容
+      reader.readAsDataURL(curFile);
+    })
   };
 
   const uploadFile = async () => {
@@ -129,7 +130,7 @@ const Upload: React.FC<UploadProps> = () => {
       return
     }
 
-    const filePromise: Promise<void>[] = photoBlobArr.map((blobObj: object, index) => {
+    const filePromise: Promise<void>[] = photoBlobArr.map((blobObj: any, index) => {
       if (blobObj.blob) {
         return fileDispose(blobObj.blob, blobObj.name); // 确保item不是null
       } else {
@@ -139,6 +140,8 @@ const Upload: React.FC<UploadProps> = () => {
         // return Promise.resolve();
       }
     })
+
+    console.log('filePromise', filePromise)
 
     Promise.all(filePromise).then(() => {
       dispatch(setState({
