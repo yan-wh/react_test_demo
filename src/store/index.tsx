@@ -17,7 +17,8 @@ const initialState: IndexState = {
   msgTitle: '',
   contentLoading: false, // 内容区域加载状态
   msgTimeout: 0, // 消息提示框定时器
-  delStatus: false // 删除图片状态
+  delStatus: false, // 删除图片状态
+  localMsg: '',
 };
 
 export const indexStore = createSlice({

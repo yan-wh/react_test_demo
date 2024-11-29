@@ -1,15 +1,23 @@
 
 // import { Outlet } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 import NavbarComponent from './navbar';
 import Message from '../components/Message';
-import { useSelector } from 'react-redux'
+import { useSelector, 
+  // useDispatch 
+} from 'react-redux'
+// import { setState } from '../store/index'
 import './index.css'
 
 const Layout = () => {
   const [loadingStyle, setLoadingStyle] = useState({});
   const contentLoading = useSelector((state: any) => state.index.contentLoading);
+  const [bodyHeight, setBodyHeight] = useState(0);
+
+  const navRef = useRef(null);
+
+  // const dispatch = useDispatch();
 
   useEffect(() => {
     if(contentLoading) {
@@ -25,19 +33,25 @@ const Layout = () => {
     }
   }, [contentLoading])
 
+  useEffect(() => {
+    const windowHeight = window.innerHeight;
+    if (navRef.current) {
+      setBodyHeight(windowHeight - navRef.current.clientHeight)
+    }
+  }, [])
+
   return (
     <>
       <div className='w-full h-full relative'>
         <Message />
-        <div className='w-full'>
+        <div className='w-full' ref={navRef}>
           <NavbarComponent />
         </div>
-        <div className='w-full h-[80%]'>
+        <div className='w-full' style={{height: bodyHeight}}>
           <Outlet />
         </div>
-        <div className='footer'>
-          {/* Footer content */}
-        </div>
+        {/* <div className='footer'>
+        </div> */}
       </div>
       <div className='absolute left-0 top-0 w-full h-full' style={{background: 'rgba(0,0,0,0.8)', ...loadingStyle}}>
         <div className='absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]'>

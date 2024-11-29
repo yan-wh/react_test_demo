@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import axios from 'axios';
 import { Button, Image as NextUIImage } from '@nextui-org/react'
 // import Compressor from 'compressorjs';
 import imageCompression from 'browser-image-compression';
@@ -9,6 +8,7 @@ import {
   useDispatch 
 } from 'react-redux'
 import { setState, setLoadingStatus } from '../../store/index'
+import { request } from '../../request'
 import './index.css'
 
 type UploadProps = {};
@@ -143,13 +143,16 @@ const Upload: React.FC<UploadProps> = () => {
 
     console.log('filePromise', filePromise)
 
-    Promise.all(filePromise).then(() => {
+    Promise.allSettled(filePromise).then((res) => {
+      console.log('上传结果', res);
       dispatch(setState({
         msgStatus: true,
         msgTitle: '提示',
-        msgInfo: '上传成功',
+        msgInfo: localStorage.getItem('localMsg') ? localStorage.getItem('localMsg') as string : '',
         msgTimeout: 2500
       }));
+    }).catch((err) => {
+      console.log('上传失败', err);
     });
 
   };
@@ -167,11 +170,19 @@ const Upload: React.FC<UploadProps> = () => {
       formData.append('totalChunks', chunks.toString());
   
       try {
-        await axios.post('/api/upload', formData, {
+        await request({
+          url: '/api/upload',
+          method: 'post',
+          data: formData,
           headers: {
             'Content-Type': 'multipart/form-data',
-          },
-        });
+          }
+        })
+        // await axios.post('/api/upload', formData, {
+        //   headers: {
+        //     'Content-Type': 'multipart/form-data',
+        //   },
+        // });
       } catch (error) {
         console.error('Error uploading chunk:', error);
       }
@@ -208,8 +219,9 @@ const Upload: React.FC<UploadProps> = () => {
 
   useEffect(() => {
     // 组件卸载前执行清理操作
-    console.log('当前包含的文件', file)
-  }, [file])
+    // console.log('当前包含的文件', file)
+    localStorage.setItem('localMsg', '') // 初始化上传消息提醒
+  }, [])
 
   return (
     <div className='w-full h-full flex flex-col justify-center items-center'>
