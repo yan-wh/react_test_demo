@@ -146,72 +146,80 @@ const delDir = (directory) => {
 app.post('/api/upload', upload.single('chunk'), async (req, res) => {
     const fileChunk = req.file;
     const { chunkIndex, totalChunks, filename } = req.body;
-    try {
-        // console.log('fileChunk', fileChunk)
-        // console.log('req.body', req.body)
-
-        console.log(`Received chunk ${chunkIndex} of${totalChunks} for file ${filename}`);
-
-        // 检查分片信息
-        if (!fileChunks[filename]) {
-            fileChunks[filename] = [];
-        }
-
-        // 存储分片文件路径
-        fileChunks[filename][chunkIndex] = fileChunk.path;
-
-        // 检查是否所有分片都已上传
-        if (Object.keys(fileChunks[filename]).length === parseInt(totalChunks)) {
-            const uploadPath = path.join(__dirname, '../uploads', filename);
-            const writeStream = fs.createWriteStream(uploadPath);
-
-            // 使用 Promise 来确保分片合并的顺序执行
-            let chunksProcessed = 0;
-            const processChunks = (index) => {
-                return new Promise((resolve, reject) => {
-                    if (index >= totalChunks) {
-                        return resolve();
-                    }
-                    const chunkFilePath = fileChunks[filename][index];
-                    const readStream = fs.createReadStream(chunkFilePath);
-                    readStream.on('end', () => {
-                        fs.unlink(chunkFilePath, (err) => {
-                            if (err) console.error(err);
+    // 获取uploads目录下的文件，并和当前上传的文件名做比较，若相同则不允许上传
+    const files = fs.readdirSync(staticDir);
+    if (files.includes(filename)) {
+        // 删除掉chunks文件夹内多余的分片数据
+        delDir(path.join(__dirname, `../uploads/chunks`));
+        return res.status(409).json({ message: `【${filename}】已存在` });
+    } else {
+        try {
+            // console.log('fileChunk', fileChunk)
+            // console.log('req.body', req.body)
+    
+            console.log(`Received chunk ${chunkIndex} of${totalChunks} for file ${filename}`);
+    
+            // 检查分片信息
+            if (!fileChunks[filename]) {
+                fileChunks[filename] = [];
+            }
+    
+            // 存储分片文件路径
+            fileChunks[filename][chunkIndex] = fileChunk.path;
+    
+            // 检查是否所有分片都已上传
+            if (Object.keys(fileChunks[filename]).length === parseInt(totalChunks)) {
+                const uploadPath = path.join(__dirname, '../uploads', filename);
+                const writeStream = fs.createWriteStream(uploadPath);
+    
+                // 使用 Promise 来确保分片合并的顺序执行
+                let chunksProcessed = 0;
+                const processChunks = (index) => {
+                    return new Promise((resolve, reject) => {
+                        if (index >= totalChunks) {
+                            return resolve();
+                        }
+                        const chunkFilePath = fileChunks[filename][index];
+                        const readStream = fs.createReadStream(chunkFilePath);
+                        readStream.on('end', () => {
+                            fs.unlink(chunkFilePath, (err) => {
+                                if (err) console.error(err);
+                            });
+                            chunksProcessed++;
+                            resolve();
                         });
-                        chunksProcessed++;
-                        resolve();
+                        readStream.on('error', reject);
+                        readStream.pipe(writeStream, { end: false });
                     });
-                    readStream.on('error', reject);
-                    readStream.pipe(writeStream, { end: false });
-                });
-            };
-
-            // 顺序处理每个分片
-            for (let i = 0; i < totalChunks; i++) {
-                await processChunks(i);
+                };
+    
+                // 顺序处理每个分片
+                for (let i = 0; i < totalChunks; i++) {
+                    await processChunks(i);
+                }
+    
+                // console.log('chunksProcessed', chunksProcessed)
+                // console.log('totalChunks', totalChunks)
+                if (chunksProcessed == totalChunks) {
+                    // 所有分片处理完成后，关闭写入流
+                    writeStream.end();
+    
+                    writeStream.on('finish', () => {
+                        console.log('分片合并完成');
+                        res.send({ message: 'File uploaded and merged successfully' });
+                    });
+                    // 删除掉chunks文件夹内多余的分片数据
+                    // delDir(path.join(__dirname, `../uploads/chunks`));
+                }
+            } else {
+                res.send({ message: 'Chunk uploaded successfully' });
             }
-
-            // console.log('chunksProcessed', chunksProcessed)
-            // console.log('totalChunks', totalChunks)
-            if (chunksProcessed == totalChunks) {
-                // 所有分片处理完成后，关闭写入流
-                writeStream.end();
-
-                writeStream.on('finish', () => {
-                    console.log('分片合并完成');
-                    res.send({ message: 'File uploaded and merged successfully' });
-                });
-                // 删除掉chunks文件夹内多余的分片数据
-                // delDir(path.join(__dirname, `../uploads/chunks`));
-            }
-        } else {
-            res.send({ message: 'Chunk uploaded successfully' });
+        } catch (error) {
+            // 错误处理逻辑
+            console.error(error);
+            // await delImg(filename); // 若合并分片或文件存在问题，删除已上传的分片或文件
+            res.status(500).send({ message: `${error}` });
         }
-    } catch (error) {
-        // 错误处理逻辑
-        console.error(error);
-        // await delImg(filename); // 若合并分片或文件存在问题，删除已上传的分片或文件
-        res.status(500).send({ message: `${error}` });
     }
 });
 
