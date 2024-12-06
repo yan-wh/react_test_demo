@@ -4,10 +4,6 @@ import { useEffect, useLayoutEffect, useRef,
     useState 
 } from "react";
 import "./index.css"
-import girl1 from "../../static/imgs/girl1.png"
-import girl2 from "../../static/imgs/girl2.png"
-import girl3 from "../../static/imgs/girl3.png"
-import city from "../../static/imgs/city.png"
 
 // const Box = ({ children, className, anim }) => {
 //     return (
@@ -147,13 +143,13 @@ export default function GsapTest({photos, photoElements, photoClass }) {
         //     <Box className="dont-animate w-[100px] h-[100px] bg-[rgb(122,33,59)]">Don't Animate</Box>
         //     <Box anim="move" className="w-[100px] h-[100px] bg-[rgb(157,160,223)]">Box</Box>
         // </div>
-        <div className="gsap-container w-full h-full bg-cover relative" ref={gsapContainer} style={{ backgroundImage: `url(${city})`, backgroundPosition: "center", backgroundRepeat: "no-repeat" }}>
+        <div className="gsap-container w-full h-full bg-cover relative" ref={gsapContainer} style={{ backgroundImage: `url(${photos.length && photos[0].src})`, backgroundPosition: "center", backgroundRepeat: "no-repeat" }}>
             <div className="warp1 w-full h-[50%] bg-cover absolute top-0 left-0 z-10" style={{ background: 'rgb(244, 242, 237)' }}></div>
             <div className="warp2 w-full h-[50%] bg-cover absolute bottom-0 left-0 z-10" style={{ background: 'rgb(244, 242, 237)' }}></div>
             {/* {photoElements} */}
-            <div className="photo photo0 w-full h-full bg-cover absolute top-0 left-0" style={{ backgroundImage: `url(${girl1})`, backgroundPosition: "center", backgroundRepeat: "no-repeat" }}></div>
-            <div className="photo photo1 w-full h-full bg-cover absolute top-0 left-0" style={{ backgroundImage: `url(${girl2})`, backgroundPosition: "center", backgroundRepeat: "no-repeat" }}></div>
-            <div className="photo photo2 w-full h-full bg-cover absolute top-0 left-0" style={{ backgroundImage: `url(${girl3})`, backgroundPosition: "center", backgroundRepeat: "no-repeat" }}></div>
+            <div className="photo photo0 w-full h-full bg-cover absolute top-0 left-0" style={{ backgroundImage: `url(${photos.length && photos[1].src})`, backgroundPosition: "center", backgroundRepeat: "no-repeat" }}></div>
+            <div className="photo photo1 w-full h-full bg-cover absolute top-0 left-0" style={{ backgroundImage: `url(${photos.length && photos[2].src})`, backgroundPosition: "center", backgroundRepeat: "no-repeat" }}></div>
+            <div className="photo photo2 w-full h-full bg-cover absolute top-0 left-0" style={{ backgroundImage: `url(${photos.length && photos[3].src})`, backgroundPosition: "center", backgroundRepeat: "no-repeat" }}></div>
             {/* <button className="absolute top-0 left-0 z-10" onClick={() => setReversed(!reversed)}>Toggle</button> */}
         </div>
     )

@@ -125,7 +125,7 @@ const Gallery: React.FC<{ imagePaths: ImageItem[] }> = ({ imagePaths }) => {
   };
 
   return (
-    <div className='w-full h-full water-fall-container overflow-auto box-border' ref={galleryRef}>
+    <div className='w-full h-full overflow-scroll water-fall-container box-border' ref={galleryRef}>
       {createImage()}
     </div>
   );

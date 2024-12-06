@@ -99,6 +99,7 @@ module.exports = {
               large: "1.125rem", // text-large
               xlarge: "1.25rem", // text-xlarge
               xxlarge: "1.5rem", // text-xxlarge
+              max: "3rem", // text-max
             },
             radius: {
               small: "4px",

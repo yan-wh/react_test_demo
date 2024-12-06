@@ -1,11 +1,11 @@
 import './App.css';
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import Layout from './layout';
 
 // 应用组件
 const App: React.FC = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   useEffect(() => {
     // 获取当前页面宽度
@@ -20,7 +20,7 @@ const App: React.FC = () => {
       // }
     }
 
-    navigate('/home');
+    // navigate('/home');
   }, [])
 
   return (

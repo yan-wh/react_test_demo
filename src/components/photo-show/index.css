@@ -7,8 +7,10 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
   column-gap: var(--s);
+
   /* 由于每一行的高度是固定的且很小，所以在视觉上，形成了瀑布流的效果 */
-  grid-auto-rows: var(--s); /* 每一行的高度是固定的，所以使用grid-auto-rows */
+  /* 每一行的高度是固定的，所以使用grid-auto-rows */
+  /* grid-auto-rows: var(--s); */
   justify-content: center;
   padding: var(--s);
 }

@@ -82,7 +82,7 @@ function getConfig3(config: IConfig13) {
 //     Skeleton, 
 //     Calendar,  
 // } from '@nextui-org/react';
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import { useSelector, 
     // useDispatch 
@@ -94,7 +94,7 @@ import { useSelector,
 import Gallery from '../../components/photo-show';
 import { anyProps } from '../../types'
 import { Photo } from '../../types'
-
+import { Waterfall } from '../../components/WaterFall'
 
 export default function Home() {
     // const {isOpen, onOpen, onOpenChange} = useDisclosure();
@@ -132,7 +132,8 @@ export default function Home() {
         <div className='w-full h-full px-2 py-2 flex'>
             <div className='w-full h-full'>
                 <div className='w-full h-full'>
-                    <Gallery imagePaths={photos} />
+                    {/* <Gallery imagePaths={photos} /> */}
+                    <Waterfall imagePaths={photos}/>
                 </div>
             </div>
             
