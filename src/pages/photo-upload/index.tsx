@@ -11,6 +11,15 @@ import { setState, setLoadingStatus } from '../../store/index'
 import { request } from '../../request'
 import './index.css'
 
+
+// 图片大小控制
+// 方案一：使用compressorjs
+// 方案二：使用imageCompression
+// 方案三：使用canvas
+// 方案四：使用 webp
+
+
+
 type UploadProps = {};
 
 const Upload: React.FC<UploadProps> = () => {
